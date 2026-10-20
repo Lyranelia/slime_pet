@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt, QTimer
+from random import randint
 
 
 def resource_path(relative):
@@ -14,7 +15,7 @@ FRAME_W = 16
 FRAME_H = 16
 FRAME_COUNT = 6
 FRAME_MS = 100
-SCALE = 4
+SCALE = randint(3, 5)
 
 MOVE_MS = 16
 MOVE_SPEED = 1
