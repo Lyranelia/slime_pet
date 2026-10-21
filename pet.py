@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt, QTimer
-from random import randint
+from random import randint, choice
 
 
 def resource_path(relative):
@@ -14,7 +14,7 @@ def resource_path(relative):
 FRAME_W = 16
 FRAME_H = 16
 FRAME_COUNT = 6
-FRAME_MS = 100
+FRAME_MS = 95
 SCALE = randint(3, 5)
 
 MOVE_MS = 16
@@ -26,18 +26,34 @@ WALK = "walk"
 LOOK = "look"
 LOOK_LOOP = 3
 
+COLORS = ["blue", "green", "purple", "orange", "turquoise"]
+
 SPRITE_LEFT = resource_path('src/slime blue left.png')
 SPRITE_RIGHT = resource_path('src/slime blue right.png')
 SPRITE_LOOKING = resource_path('src/slime blue looking.png')
 
+
+def sprite_paths(color):
+    return {
+        "left": resource_path(f'src/slime {color} left.png'),
+        "right": resource_path(f'src/slime {color} right.png'),
+        "looking": resource_path(f'src/slime {color} looking.png')
+    }
+
+
+
 class Sprite:
     
-    def __init__(self, min_x, max_x):
+    def __init__(self, min_x, max_x, color=None):
+
+        # Farben laden
+        self.color = color or choice(COLORS)
+        paths = sprite_paths(self.color)
 
         # Richtungen laden
-        self.frames_left = self.load_frames(SPRITE_LEFT)
-        self.frames_right = self.load_frames(SPRITE_RIGHT)
-        self.frames_looking = self.load_frames(SPRITE_LOOKING, 10)
+        self.frames_left = self.load_frames(paths["left"])
+        self.frames_right = self.load_frames(paths["right"])
+        self.frames_looking = self.load_frames(paths["looking"], 10)
         self.frames_looking_right = self.frames_looking[5:] + self.frames_looking[:5]
 
         self.width = FRAME_W * SCALE
