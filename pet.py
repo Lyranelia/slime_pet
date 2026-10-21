@@ -26,11 +26,8 @@ WALK = "walk"
 LOOK = "look"
 LOOK_LOOP = 3
 
-COLORS = ["blue", "green", "purple", "orange", "turquoise"]
+COLORS = ["blue", "green", "purple", "turquoise"]
 
-SPRITE_LEFT = resource_path('src/slime blue left.png')
-SPRITE_RIGHT = resource_path('src/slime blue right.png')
-SPRITE_LOOKING = resource_path('src/slime blue looking.png')
 
 
 def sprite_paths(color):
@@ -69,6 +66,8 @@ class Sprite:
 
         self.state = WALK
         self.loops_left = 0
+
+        self.holding = False
 
 
     def contains(self, x, y):
@@ -119,7 +118,7 @@ class Sprite:
         self.frame_index += 1
         if self.frame_index >= len(self.frames):
             self.frame_index = 0
-            if self.state == LOOK:
+            if self.state == LOOK and not self.holding:
                 self.loops_left -= 1
                 if self.loops_left <= 0:
                     self.state = WALK
@@ -149,3 +148,13 @@ class Sprite:
             self.frames = self.frames_right
         else:
             self.frames = self.frames_left
+
+
+    def hold(self):
+        self.holding = True
+        self.look()
+
+
+    def release(self):
+        self.holding = False
+        self.loops_left = 0
